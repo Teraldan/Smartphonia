@@ -2,7 +2,8 @@
   <v-container grid-list-md>
     <v-layout row>
       <v-flex>
-        <v-card>
+        {{ barCode }}
+        <v-card v-if="product">
           <v-card-media
               src="http://consumer-img.huawei.com/content/dam/huawei-cbg-site/common/mkt/list-image/phones/p10/p10-listimage-black.png"
               height="400px"
@@ -61,9 +62,9 @@
 
                 <v-layout column>
                   <v-flex>
-                    <v-icon v-for="starI in starsFillCount" :key="starI">star</v-icon>
-                    <v-icon v-for="starI in starsStrokeCount" :key="starI">star_half</v-icon>
-                    <v-icon v-for="starI in starsEmptyCount" :key="starI">star_border</v-icon>
+                    <v-icon color="yellow" v-for="starI in starsFillCount" :key="starI">star</v-icon>
+                    <v-icon color="yellow" v-for="starI in starsStrokeCount" :key="starI">star_half</v-icon>
+                    <v-icon color="yellow" v-for="starI in starsEmptyCount" :key="starI">star_border</v-icon>
                     (344 votes)
                   </v-flex>
 
@@ -86,9 +87,9 @@
                           </v-flex>
                         </v-layout>
 
-                        <v-icon v-for="starI in starsFillCount" :key="starI">star</v-icon>
-                        <v-icon v-for="starI in starsStrokeCount" :key="starI">star_half</v-icon>
-                        <v-icon v-for="starI in starsEmptyCount" :key="starI">star_border</v-icon>
+                        <v-icon color="yellow" v-for="starI in starsFillCount" :key="starI">star</v-icon>
+                        <v-icon color="yellow" v-for="starI in starsStrokeCount" :key="starI">star_half</v-icon>
+                        <v-icon color="yellow" v-for="starI in starsEmptyCount" :key="starI">star_border</v-icon>
                         <br>
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc nec ex orci. Curabitur consequat in est ac sodales. Interdum et malesuada fames ac ante ipsum primis in faucibus.
                       </v-card-text>
@@ -119,48 +120,11 @@
               </v-card>
             </v-flex>
             <v-flex>
-              <v-card>
-                <v-card-text>
-                  <h1 class="headline">Your cart</h1>
-                  <v-list two-line>
-                    <v-list-tile>
-                      <v-list-tile-content>
-                        <v-list-tile-title>
-                            1x Somsong S10
-                        </v-list-tile-title>
-                        <v-list-tile-sub-title>
-                          $249
-                        </v-list-tile-sub-title>
-                      </v-list-tile-content>
-                      <v-list-tile-action>
-                        <v-btn icon ripple>
-                          <v-icon color="grey lighten-1">delete</v-icon>
-                        </v-btn>
-                      </v-list-tile-action>
-                    </v-list-tile>
-                  </v-list>
-                </v-card-text>
-
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn primary flat>Checkout</v-btn>
-                </v-card-actions>
-              </v-card>
+              <app-cart></app-cart>
             </v-flex>
 
             <v-flex>
-              <v-card>
-                <v-card-text>
-                  <h1 class="headline">My account</h1>
-                  <br>
-                  M. BARTHES Pierre
-                </v-card-text>
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn flat>Profile</v-btn>
-                  <v-btn error flat>Logout</v-btn>
-                </v-card-actions>
-              </v-card>
+              <app-account></app-account>
             </v-flex>
           </v-layout>
         </v-flex>
@@ -170,32 +134,25 @@
 </template>
 
 <script>
+import AppCart from '@/components/AppCart'
+import AppAccount from '@/components/AppAccount'
+
 export default {
   name: 'Product',
+  components: {
+    AppCart, AppAccount
+  },
   data () {
     return {
-      product: {
-        name: 'Nice phone',
-        imgUrl:
-          'http://consumer-img.huawei.com/content/dam/huawei-cbg-site/common/mkt/list-image/phones/p10/p10-listimage-black.png',
-        stars: 3,
-        price: 229,
-        description:
-          'Smartphone J3 Noir débloqué/Design compact/Ecran 5" Super Amoled HD/Reseau 4G(catégorie 4),Wifi/Android Lollipop 5.1/Processeur Quad Core 1,5Ghz/Appareil Photo 8MP',
-        caracteristics: {
-          brand: 'Aser',
-          color: 'Black',
-          screen: 'Yes',
-          features: {
-            wifi: true,
-            bluetooth: true,
-            nfc: false
-          }
-        }
-      }
     }
   },
+  props: {
+    barCode: { type: Number }
+  },
   computed: {
+    product () {
+      this.$store.getters.smartphone(this.barCode)
+    },
     starsFillCount () {
       return Math.floor(
         this.product.stars % 5 === 0 ? 5 : this.product.stars % 5

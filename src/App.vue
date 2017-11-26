@@ -1,5 +1,5 @@
 <template>
-  <v-app light>
+  <v-app dark>
     <v-toolbar app>
       <v-toolbar-title v-text="title"></v-toolbar-title>
       <v-spacer></v-spacer>
@@ -7,7 +7,7 @@
         <v-btn flat>Home</v-btn>
         <v-btn router to="/store/smartphones" flat>Smartphones</v-btn>
         <v-btn flat>Contracts</v-btn>
-        <v-btn flat>Account</v-btn>
+        <v-btn router to="/myaccount" flat>Account</v-btn>
       </v-toolbar-items>
     </v-toolbar>
     <v-content>
