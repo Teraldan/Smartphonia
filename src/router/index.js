@@ -4,6 +4,7 @@ import Home from '@/components/Home'
 import Smartphones from '@/components/Smartphones'
 import Product from '@/components/Product'
 import Account from '@/components/Account'
+import Order from '@/components/Order'
 
 Vue.use(Router)
 
@@ -29,6 +30,12 @@ export default new Router({
       path: '/myaccount',
       name: 'Account',
       component: Account
+    },
+    {
+      path: '/myaccount/order/:id',
+      name: 'Order',
+      props: true,
+      component: Order
     }
   ],
   mode: 'history'

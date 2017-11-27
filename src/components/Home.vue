@@ -4,7 +4,7 @@
       <v-flex>
         <v-card>
           <v-card-media
-          src="https://cdn.pixabay.com/photo/2015/02/15/05/36/abstract-636901_960_720.jpg"
+          src="/static/abstract.jpg"
           height="300px">
             <v-container fill-height fluid>
               <v-layout flex align-center justify-center>

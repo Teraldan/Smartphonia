@@ -1,6 +1,8 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
+import moment from 'moment'
+import VueMomentJS from 'vue-momentjs'
 import store from '@/store/store'
 
 import Vuetify from 'vuetify'
@@ -13,6 +15,7 @@ import router from './router'
 
 Vue.use(Vuetify)
 Vue.use(Vue2Filters)
+Vue.use(VueMomentJS, moment)
 
 Vue.config.productionTip = false
 

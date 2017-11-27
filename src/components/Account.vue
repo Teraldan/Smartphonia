@@ -4,7 +4,7 @@
       <v-flex>
         <v-card>
           <v-card-media
-          src="https://cdn.pixabay.com/photo/2015/02/15/05/36/abstract-636901_960_720.jpg"
+          src="/static/abstract.jpg"
           height="120px">
             <v-container fill-height fluid>
               <v-layout flex align-center justify-center>
@@ -41,7 +41,7 @@
                   </v-radio-group>
 
                   <v-list avatar two-line>
-                    <v-list-tile @click="">
+                    <v-list-tile @click="$router.push('/myaccount/order/'+325972)">
                       <v-list-tile-action>
                         <v-icon>assignment</v-icon>
                       </v-list-tile-action>
