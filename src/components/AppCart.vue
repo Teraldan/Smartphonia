@@ -23,7 +23,7 @@
 
     <v-card-actions>
       <v-spacer></v-spacer>
-      <v-btn primary flat>Checkout</v-btn>
+      <v-btn color="primary" flat>Checkout</v-btn>
     </v-card-actions>
   </v-card>
 </template>

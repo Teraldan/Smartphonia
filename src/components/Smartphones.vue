@@ -1,5 +1,23 @@
 <template>
   <v-container grid-list-md>
+    <v-layout column>
+      <v-flex>
+        <v-card>
+          <v-card-media
+          src="https://cdn.pixabay.com/photo/2015/02/15/05/36/abstract-636901_960_720.jpg"
+          height="100px">
+            <v-container fill-height fluid>
+              <v-layout flex align-center justify-center>
+                <v-flex xs12 align-end flexbox class="white--text">
+                  <h1 class="text-xs-left display-1">Smartphones</h1>
+                </v-flex>
+              </v-layout>
+            </v-container>
+          </v-card-media>
+        </v-card>
+      </v-flex>
+    </v-layout>
+
     <v-layout row>
       <v-container grid-list-md class="my-0">
         <v-layout row wrap>
@@ -17,13 +35,13 @@
                 <h1 class="headline">Filters</h1>
                 <v-layout column wrap>
                   <v-flex xs12>
-                    <v-select label="Brand" :items="brands"></v-select>
+                    <v-select label="Brand" v-model="filters.brand" :items="brands"></v-select>
                   </v-flex>
                   <v-flex xs12>
-                    <v-select label="Screen" :items="screens"></v-select>
+                    <v-select label="Screen" v-model="filters.screen" :items="screens"></v-select>
                   </v-flex>
                   <v-flex xs12>
-                    <v-select label="Color" :items="colors"></v-select>
+                    <v-select label="Color" v-model="filters.color" :items="colors"></v-select>
                   </v-flex>
                   <v-flex xs12>
                     <v-select
@@ -38,8 +56,7 @@
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn flat>Reset</v-btn>
-                <v-btn flat>Filter</v-btn>
+                <v-btn flat @click="resetFilters()">Reset</v-btn>
               </v-card-actions>
             </v-card>
           </v-flex>
@@ -72,16 +89,52 @@ export default {
       brands: ['Somsong', 'Syno', 'THC', 'Acus', 'Aser'],
       screens: ['Yes', 'No'],
       colors: ['Red', 'Blue', 'Black', 'White', 'Grey', 'Sideral'],
-      features: ['WiFi', 'Bluetooth', 'NFC']
+      features: ['WiFi', 'Bluetooth', 'NFC'],
+      filters: {
+        brand: '',
+        screen: '',
+        color: ''
+      }
     }
   },
   computed: {
-    smartphones () { return this.$store.getters.smartphones }
+    smartphones () {
+      let smartphones = this.$store.getters.smartphones
+      let brand = this.filters.brand
+      let screen = this.filters.screen
+      let color = this.filters.color
+
+      if (brand !== '') {
+        smartphones = smartphones.filter(smartphone => smartphone.caracteristics.brand === brand)
+      }
+
+      if (screen !== '') {
+        smartphones = smartphones.filter(smartphone => smartphone.caracteristics.screen === screen)
+      }
+
+      if (color !== '') {
+        smartphones = smartphones.filter(smartphone => smartphone.caracteristics.color === color)
+      }
+
+      return smartphones
+    }
+  },
+  methods: {
+    resetFilters () {
+      this.filters.brand = ''
+      this.filters.screen = ''
+      this.filters.color = ''
+    }
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
+.fade-slow-enter-active, .fade-slow-leave-active {
+  transition: all 0.5s
+}
+.fade-slow-enter, .fade-slow-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0
+}
 </style>

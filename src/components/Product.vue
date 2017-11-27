@@ -1,11 +1,10 @@
 <template>
   <v-container grid-list-md>
     <v-layout row>
-      <v-flex>
-        {{ barCode }}
-        <v-card v-if="product">
+      <v-flex md9>
+        <v-card>
           <v-card-media
-              src="http://consumer-img.huawei.com/content/dam/huawei-cbg-site/common/mkt/list-image/phones/p10/p10-listimage-black.png"
+              :src="product.pictureUrl"
               height="400px"
               contain
           >
@@ -13,10 +12,7 @@
 
 
           <v-card-text>
-              <h1 class="headline">Nice phone</h1>
-
-
-
+              <h1 class="headtitle">{{ product.name }}</h1>
               <h3>Description</h3>
               <p>
                 {{ product.description }}
@@ -49,7 +45,7 @@
                       <v-layout row>
                         <v-flex xs4>Features</v-flex>
                         <v-flex xs8>
-                          <v-chip v-for="(val, prop) in product.caracteristics.features" :key="val">{{ prop }}</v-chip>
+                          <v-chip v-for="(val, prop) in product.caracteristics.features" :key="val">{{ prop | capitalize }}</v-chip>
                         </v-flex>
                       </v-layout>
                     </v-list-tile>
@@ -63,9 +59,9 @@
                 <v-layout column>
                   <v-flex>
                     <v-icon color="yellow" v-for="starI in starsFillCount" :key="starI">star</v-icon>
-                    <v-icon color="yellow" v-for="starI in starsStrokeCount" :key="starI">star_half</v-icon>
+                    <v-icon color="yellow" v-for="starI in starsHalfCount" :key="starI">star_half</v-icon>
                     <v-icon color="yellow" v-for="starI in starsEmptyCount" :key="starI">star_border</v-icon>
-                    (344 votes)
+                    (344 {{ 344 | pluralize('vote') }})
                   </v-flex>
 
                   <v-flex>
@@ -88,7 +84,7 @@
                         </v-layout>
 
                         <v-icon color="yellow" v-for="starI in starsFillCount" :key="starI">star</v-icon>
-                        <v-icon color="yellow" v-for="starI in starsStrokeCount" :key="starI">star_half</v-icon>
+                        <v-icon color="yellow" v-for="starI in starsHalfCount" :key="starI">star_half</v-icon>
                         <v-icon color="yellow" v-for="starI in starsEmptyCount" :key="starI">star_border</v-icon>
                         <br>
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc nec ex orci. Curabitur consequat in est ac sodales. Interdum et malesuada fames ac ante ipsum primis in faucibus.
@@ -104,18 +100,18 @@
         </v-flex>
 
 
-        <v-flex sm4>
+        <v-flex md3>
           <v-layout column>
             <v-flex>
               <v-card>
                 <v-card-text>
-                  <h1 class="headline">$229 </h1>
+                  <h1 class="headline">{{ product.price | currency('$') }}</h1>
                   <h2 class="subheading">Shipping: $9.95</h2>
                 </v-card-text>
 
                 <v-card-actions>
                   <v-spacer></v-spacer>
-                  <v-btn primary flat>Add to cart</v-btn>
+                  <v-btn color="primary" flat>Add to cart</v-btn>
                 </v-card-actions>
               </v-card>
             </v-flex>
@@ -126,6 +122,7 @@
             <v-flex>
               <app-account></app-account>
             </v-flex>
+
           </v-layout>
         </v-flex>
       </v-layout>
@@ -147,18 +144,19 @@ export default {
     }
   },
   props: {
-    barCode: { type: Number }
+    barCode: { type: String }
   },
   computed: {
     product () {
-      this.$store.getters.smartphone(this.barCode)
+      let smartphone = this.$store.getters.smartphone(this.barCode)
+      return smartphone || {}
     },
     starsFillCount () {
       return Math.floor(
         this.product.stars % 5 === 0 ? 5 : this.product.stars % 5
       )
     },
-    starsStrokeCount () {
+    starsHalfCount () {
       return this.product.stars - this.starsFillCount > 0 ? 1 : 0
     },
     starsEmptyCount () {

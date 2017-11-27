@@ -7,8 +7,8 @@
     </v-card-text>
     <v-card-actions>
       <v-spacer></v-spacer>
-      <v-btn flat>Profile</v-btn>
-      <v-btn error flat>Logout</v-btn>
+      <v-btn router to="/myaccount" flat>Profile</v-btn>
+      <v-btn color="error" flat>Logout</v-btn>
     </v-card-actions>
   </v-card>
 </template>

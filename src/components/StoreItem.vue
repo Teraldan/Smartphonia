@@ -2,7 +2,7 @@
   <v-card>
     <v-card-media
     :src="product.pictureUrl"
-    height="300px"
+    :height="height"
     contain
     @click="$router.push('/store/smartphone/'+product.barCode)">
     </v-card-media>
@@ -13,27 +13,25 @@
 
       <v-layout row>
         <v-flex>
-          <v-icon color="yellow" style="font-size: 16px; line-height: 32px">star</v-icon>
-          <v-icon color="yellow" style="font-size: 16px; line-height: 32px">star</v-icon>
-          <v-icon color="yellow" style="font-size: 16px; line-height: 32px">star</v-icon>
-          <v-icon color="yellow" style="font-size: 16px; line-height: 32px">star_half</v-icon>
-          <v-icon color="yellow" style="font-size: 16px; line-height: 32px">star_border</v-icon>
+          <v-icon color="yellow" class="star-icon" v-for="starI in starsFillCount" :key="starI">star</v-icon>
+          <v-icon color="yellow" class="star-icon" v-for="starI in starsHalfCount" :key="starI">star_half</v-icon>
+          <v-icon color="yellow" class="star-icon" v-for="starI in starsEmptyCount" :key="starI">star_border</v-icon>
         </v-flex>
         <v-flex>
-          <h2 class="text-xs-right">$229</h2>
+          <h2 class="text-xs-right">{{ product.price | currency('$') }}</h2>
         </v-flex>
       </v-layout>
 
       <v-layout row>
         <v-flex>
-          {{ product.description | truncate(100) }}
+          {{ product.description | truncate(150) }}
         </v-flex>
       </v-layout>
     </v-card-text>
 
-    <v-card-actions>
+    <v-card-actions v-if="cart">
       <v-spacer></v-spacer>
-      <v-btn flat primary>Add to cart</v-btn>
+      <v-btn flat color="primary">Add to cart</v-btn>
     </v-card-actions>
   </v-card>
 </template>
@@ -42,7 +40,9 @@
 export default {
   name: 'StoreItem',
   props: {
-    product: { type: Object }
+    product: { type: Object },
+    height: { type: String, default: '300' },
+    cart: { type: Boolean, default: true }
   },
   computed: {
     starsFillCount () {
@@ -50,7 +50,7 @@ export default {
         this.product.stars % 5 === 0 ? 5 : this.product.stars % 5
       )
     },
-    starsStrokeCount () {
+    starsHalfCount () {
       return this.product.stars - this.starsFillCount > 0 ? 1 : 0
     },
     starsEmptyCount () {
@@ -59,3 +59,9 @@ export default {
   }
 }
 </script>
+
+<style>
+.star-icon {
+  font-size: 16px; line-height: 32px;
+}
+</style>
