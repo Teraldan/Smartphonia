@@ -9,7 +9,7 @@
             <v-container fill-height fluid>
               <v-layout flex align-center justify-center>
                 <v-flex xs12 align-end flexbox class="white--text">
-                  <h1 class="text-xs-left display-1">Welcome back, {{ $store.getters.accountName }} !</h1>
+                  <h1 class="text-xs-left display-1">Welcome back, {{ client.firstname }} !</h1>
                 </v-flex>
               </v-layout>
             </v-container>
@@ -20,37 +20,22 @@
               <v-layout row>
                 <v-flex md3>
                   <v-list>
-                    <v-list-tile @click="">
+                    <v-list-tile router to="/my/" exact>
                       My informations
                     </v-list-tile>
-                    <v-list-tile @click="">
+                    <v-list-tile router to="/my/orders">
                       My orders
                     </v-list-tile>
-                    <v-list-tile @click="">
+                    <v-list-tile router to="/my/settings">
                       My settings
                     </v-list-tile>
                   </v-list>
                 </v-flex>
 
                 <v-flex md9>
-                  <h1 class="title">My orders</h1>
-
-                  <v-radio-group row>
-                    <v-checkbox label="Awaiting approuval" value="approuval"></v-checkbox>
-                    <v-checkbox label="Awaiting shipment" value="shipping"></v-checkbox>
-                  </v-radio-group>
-
-                  <v-list avatar two-line>
-                    <v-list-tile @click="$router.push('/myaccount/order/'+325972)">
-                      <v-list-tile-action>
-                        <v-icon>assignment</v-icon>
-                      </v-list-tile-action>
-                      <v-list-tile-content>
-                        <v-list-tile-title>Order n°325972</v-list-tile-title>
-                        <v-list-tile-sub-title>$564 1x Somsong S10, 2x Forfait CROUS</v-list-tile-sub-title>
-                      </v-list-tile-content>
-                    </v-list-tile>
-                  </v-list>
+                  <transition name="slide-x-fade" mode="out-in">
+                    <router-view></router-view>
+                  </transition>
                 </v-flex>
               </v-layout>
             </v-container>
@@ -63,5 +48,11 @@
 
 <script>
 export default {
+  name: 'Account',
+  computed: {
+    client () {
+      return this.$store.getters.client
+    }
+  }
 }
 </script>

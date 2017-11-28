@@ -4,7 +4,36 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 
 const state = {
-  accountName: 'M. BARTHES Pierre',
+  client: {
+    firstname: 'Pierre',
+    lastname: 'BARTHES',
+    email: 'pierre.barthes@etu.univ-amu.fr',
+    birthDate: new Date(),
+    orders: [
+      {
+        id: 12345,
+        billingName: 'BARTHES Pierre',
+        date: new Date(),
+        deliveryAddress: '45 chemin des ormes',
+        billingAddress: '676 boulevard de la fête 57412 Bibiche',
+        products: [
+          { name: 'Somsong S10', price: 259, count: 2 },
+          { name: 'Forfait CROUS', price: 12, count: 1 }
+        ]
+      },
+      {
+        id: 321,
+        billingName: 'BARTHES Pierre',
+        date: 'Sun Jan 01 2017 21:20:40 GMT+0100 (Paris, Madrid)',
+        deliveryAddress: '45 chemin des ormes',
+        billingAddress: '676 boulevard de la fête 57412 Bibiche',
+        products: [
+          { name: 'Crumble 9', price: 984, count: 1 },
+          { name: 'Forfait SHEAL', price: 45, count: 1 }
+        ]
+      }
+    ]
+  },
   cart: [
     { name: 'Somsong S10', price: 259, count: 2 },
     { name: 'Forfait CROUS', price: 12, count: 1 }
@@ -56,9 +85,13 @@ const actions = {
 }
 
 const getters = {
-  accountName (state) { return state.accountName },
-  cart (state) { return state.cart },
-  smartphones (state) { return state.smartphones },
+  client: state => state.client,
+  orders: state => state.client.orders,
+  order (state) {
+    return idOrder => state.client.orders.filter(order => order.id === parseInt(idOrder))[0]
+  },
+  cart: state => state.cart,
+  smartphones: state => state.smartphones,
   smartphone (state) {
     return barCode => state.smartphones.filter(smartphone => smartphone.barCode === parseInt(barCode))[0]
   }
