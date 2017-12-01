@@ -47,6 +47,7 @@
                     <v-select
                       label="Features"
                       :items="features"
+                      v-model="filters.features"
                       multiple
                       chips
                       persistent-hint
@@ -93,7 +94,8 @@ export default {
       filters: {
         brand: '',
         screen: '',
-        color: ''
+        color: '',
+        features: []
       }
     }
   },
@@ -103,6 +105,7 @@ export default {
       let brand = this.filters.brand
       let screen = this.filters.screen
       let color = this.filters.color
+      let features = this.filters.features
 
       if (brand !== '') {
         smartphones = smartphones.filter(smartphone => smartphone.caracteristics.brand === brand)
@@ -114,6 +117,19 @@ export default {
 
       if (color !== '') {
         smartphones = smartphones.filter(smartphone => smartphone.caracteristics.color === color)
+      }
+
+      if (features.length !== 0) {
+        smartphones = smartphones.filter(smartphone => {
+          let r = false
+
+          features.forEach(feature => {
+            feature = feature.toLowerCase()
+            r = smartphone.caracteristics.features[feature]
+          })
+
+          return r
+        })
       }
 
       return smartphones

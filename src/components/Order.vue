@@ -2,7 +2,7 @@
   <v-container>
     <v-layout row>
       <v-flex>
-        <v-card>
+        <v-card v-if="!order">
           <v-card-text>
             <v-btn flat router to="/my/orders">
               <v-icon>
@@ -11,6 +11,32 @@
               my orders
             </v-btn>
           </v-card-text>
+          <v-card-media
+          src="/static/abstract.jpg"
+          height="120px">
+            <v-container fill-height fluid>
+              <v-layout flex align-center justify-center>
+                <v-flex xs12 align-end flexbox class="white--text">
+                  <h1 class="text-xs-left display-1">Order #?</h1>
+                </v-flex>
+              </v-layout>
+            </v-container>
+          </v-card-media>
+          <v-card-text>
+            <h2>Order doesn't exist</h2>
+          </v-card-text>
+        </v-card>
+
+        <v-card v-if="order">
+          <v-card-text>
+            <v-btn flat router to="/my/orders">
+              <v-icon>
+                arrow_left
+              </v-icon>
+              my orders
+            </v-btn>
+          </v-card-text>
+
           <v-card-media
           src="/static/abstract.jpg"
           height="120px">
@@ -119,9 +145,6 @@ export default {
   },
   data () {
     return {
-      product: {
-        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum purus diam, feugiat vitae neque id, pretium congue ipsum. Morbi vel fringilla odio. Nullam suscipit, felis ut dapibus consectetur, libero est egestas augue, sed facilisis augue est non massa. Praesent faucibus fringilla scelerisque. In hac habitasse platea dictumst. Phasellus laoreet ex sit amet enim euismod posuere. Duis tincidunt nisl eget sem hendrerit efficitur.'
-      }
     }
   },
   computed: {
