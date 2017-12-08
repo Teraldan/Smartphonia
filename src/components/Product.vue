@@ -4,7 +4,7 @@
       <v-flex md9>
         <v-card>
           <v-card-media
-              :src="product.pictureUrl"
+              src=""
               height="400px"
               contain
           >
@@ -12,10 +12,14 @@
 
 
           <v-card-text>
-              <h1 class="headtitle">{{ product.name }}</h1>
+              <h1 class="headtitle">{{ product.nom_modele }} 
+                <span class="caption" v-if="product.edition_limitee==1">Edition limitée</span>
+              </h1>
+              
+
               <h3>Description</h3>
               <p>
-                {{ product.description }}
+                {{ product.description_vendeur }}
               </p>
 
 
@@ -26,26 +30,28 @@
                     <v-list-tile>
                       <v-layout row>
                         <v-flex xs4>Brand</v-flex>
-                        <v-flex xs8>{{ product.caracteristics.brand }}</v-flex>
+                        <v-flex xs8>{{ product.nom_marque }}</v-flex>
                       </v-layout>
                     </v-list-tile>
                     <v-list-tile>
                       <v-layout row>
                         <v-flex xs4>Color</v-flex>
-                        <v-flex xs8>{{ product.caracteristics.color }}</v-flex>
+                        <v-flex xs8>{{ product.couleur }}</v-flex>
                       </v-layout>
                     </v-list-tile>
                     <v-list-tile>
                       <v-layout row>
                         <v-flex xs4>Screen</v-flex>
-                        <v-flex xs8>{{ product.caracteristics.screen }}</v-flex>
+                        <v-flex xs8>{{ product.taille_ecran }}</v-flex>
                       </v-layout>
                     </v-list-tile>
                     <v-list-tile>
                       <v-layout row>
                         <v-flex xs4>Features</v-flex>
                         <v-flex xs8>
-                          <v-chip v-for="(val, prop) in product.caracteristics.features" :key="val">{{ prop | capitalize }}</v-chip>
+                          <v-chip v-if="product.wifi==1">Wifi</v-chip>
+                          <v-chip v-if="product.bluetooth==1">Bluetooth</v-chip>
+                          <v-chip v-if="product.ir==1">IR</v-chip>
                         </v-flex>
                       </v-layout>
                     </v-list-tile>
@@ -105,7 +111,7 @@
             <v-flex>
               <v-card>
                 <v-card-text>
-                  <h1 class="headline">{{ product.price | currency('$') }}</h1>
+                  <h1 class="headline">{{ product.prix | currency('$') }}</h1>
                   <h2 class="subheading">Shipping: $9.95</h2>
                 </v-card-text>
 
@@ -152,16 +158,24 @@ export default {
       return smartphone || {}
     },
     starsFillCount () {
-      return Math.floor(
-        this.product.stars % 5 === 0 ? 5 : this.product.stars % 5
-      )
+      return 0
+      // return Math.floor(
+      //   this.product.stars % 5 === 0 ? 5 : this.product.stars % 5
+      // )
     },
     starsHalfCount () {
-      return this.product.stars - this.starsFillCount > 0 ? 1 : 0
+      return 0
+      // return this.product.stars - this.starsFillCount > 0 ? 1 : 0
     },
     starsEmptyCount () {
-      return Math.floor(5 - this.product.stars)
+      return 5
+
+      // return Math.floor(5 - this.product.stars)
     }
+  },
+  created () {
+    console.log('produit.vue created')
+    console.log(this.product)
   }
 }
 </script>

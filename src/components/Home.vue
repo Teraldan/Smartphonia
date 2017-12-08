@@ -30,6 +30,7 @@
         <v-layout row>
           <v-flex
           v-for="smartphone in limitBy(orderBy(smartphones, 'viewedCount', -1), 3)"
+          md4
           :key="JSON.stringify(smartphone)">
             <store-item height="200" :cart="false" :product="smartphone"></store-item>
           </v-flex>
@@ -49,6 +50,7 @@
         <v-layout row>
           <v-flex
           v-for="smartphone in limitBy(orderBy(smartphones, 'stars', -1), 3)"
+          md4
           :key="JSON.stringify(smartphone)">
             <store-item height="200" :cart="false" :product="smartphone"></store-item>
           </v-flex>

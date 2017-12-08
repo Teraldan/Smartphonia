@@ -1,9 +1,12 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
+import axios from 'axios'
+
 Vue.use(Vuex)
 
 const state = {
+  loading: [],
   client: {
     firstname: 'Pierre',
     lastname: 'BARTHES',
@@ -39,6 +42,7 @@ const state = {
     { name: 'Forfait CROUS', price: 12, count: 1 }
   ],
   smartphones: [
+    /*
     {
       barCode: 1,
       name: 'Somsong S10',
@@ -50,41 +54,69 @@ const state = {
       caracteristics: {
         brand: 'Somsong', screen: 'Yes', color: 'Black', features: { wifi: true, bluetooth: true }
       }
-    },
-    {
-      barCode: 2,
-      name: 'Aser V8',
-      pictureUrl: 'http://consumer-img.huawei.com/content/dam/huawei-cbg-site/common/mkt/list-image/phones/mate-9/mate-9-listimage-gold.png',
-      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sed lorem efficitur, dignissim mi a, malesuada risus. Nam ut finibus augue. Maecenas nibh dui, malesuada nec nulla ut, ultricies viverra tellus. Mauris erat lorem, finibus non congue vitae, sollicitudin in sem. Mauris commodo pretium purus, eu pellentesque ex placerat in. Aliquam felis magna, efficitur non leo tincidunt, posuere tincidunt ante. In congue nibh in magna lobortis, sit amet luctus mi sollicitudin.',
-      stars: 3.7,
-      price: 187,
-      viewedCount: 50,
-      caracteristics: {
-        brand: 'Aser', screen: 'Yes', color: 'Black', features: { nfc: true, bluetooth: true }
-      }
-    },
-    {
-      barCode: 3,
-      name: 'Acus Mo',
-      pictureUrl: 'http://consumer-img.huawei.com/content/dam/huawei-cbg-site/common/mkt/list-image/phones/mate10-pro/mate10pro-listimage-bule.png',
-      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sed lorem efficitur, dignissim mi a, malesuada risus. Nam ut finibus augue. Maecenas nibh dui, malesuada nec nulla ut, ultricies viverra tellus. Mauris erat lorem, finibus non congue vitae, sollicitudin in sem. Mauris commodo pretium purus, eu pellentesque ex placerat in. Aliquam felis magna, efficitur non leo tincidunt, posuere tincidunt ante. In congue nibh in magna lobortis, sit amet luctus mi sollicitudin.',
-      stars: 3.8,
-      price: 645,
-      viewedCount: 15,
-      caracteristics: {
-        brand: 'Acus', screen: 'No', color: 'Blue', features: { wifi: true, nfc: true }
-      }
     }
+    */
   ]
 }
 
 const mutations = {
+  PUSH_LOADING (state, payload) {
+    if (payload === undefined) {
+      payload = true
+    }
+    state.loading.push(payload)
+  },
+  SHIFT_LOADING (state, payload) {
+    let index = state.loading.indexOf(payload)
+    if (index === -1) {
+      state.loading.shift()
+    } else {
+      state.loading.splice(index, 1)
+    }
+  },
+  SET_SMARTPHONES (state, payload) {
+    state.smartphones = payload
+  }
 }
 
 const actions = {
+  pushLoading ({ commit }, payload) {
+    commit('PUSH_LOADING', payload)
+  },
+  shiftLoading ({ commit }, payload) {
+    commit('SHIFT_LOADING', payload)
+  },
+  loadSmartphones ({ commit }) {
+    commit('PUSH_LOADING', 'smartphones')
+    axios.get(`http://teraldan.ddns.net/smartphonia/api/get/smartphones.php`)
+    .then(response => {
+      commit('SET_SMARTPHONES', response.data)
+      console.log(response.data)
+      commit('SHIFT_LOADING', 'smartphones')
+    })
+    .catch(e => {
+      console.log(e)
+      commit('SHIFT_LOADING', 'smartphones')
+    })
+  }
 }
 
 const getters = {
+  loading (state) {
+    return state.loading
+  },
+  isLoadingType (state) {
+    return type => {
+      let isLoading = state.loading.length !== 0
+      if (isLoading) {
+        return state.loading.filter(loadType => {
+          return loadType === type
+        }).length !== 0
+      }
+
+      return false
+    }
+  },
   client: state => state.client,
   orders: state => state.client.orders,
   order (state) {
@@ -93,7 +125,11 @@ const getters = {
   cart: state => state.cart,
   smartphones: state => state.smartphones,
   smartphone (state) {
-    return barCode => state.smartphones.filter(smartphone => smartphone.barCode === parseInt(barCode))[0]
+    return code_barre => state.smartphones.filter(smartphone => {
+      console.log('filter smartphone')
+      console.log(smartphone.code_barre === code_barre)
+      return smartphone.code_barre === code_barre
+    })[0]
   }
 }
 

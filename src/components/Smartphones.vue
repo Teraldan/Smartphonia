@@ -19,7 +19,11 @@
     </v-layout>
 
     <v-layout row>
-      <v-container grid-list-md class="my-0">
+      <v-container grid-list-md class="my-0" v-if="isLoadingSmartphones">
+        <v-progress-linear :indeterminate="true"></v-progress-linear>
+      </v-container>
+
+      <v-container grid-list-md class="my-0" v-else>
         <v-layout row wrap>
           <v-flex sm6 lg4 xl3 v-for="item in smartphones" :key="JSON.stringify(item)">
             <store-item :product="item"></store-item>
@@ -100,6 +104,9 @@ export default {
     }
   },
   computed: {
+    isLoadingSmartphones () {
+      return this.$store.getters.isLoadingType('smartphones')
+    },
     smartphones () {
       let smartphones = this.$store.getters.smartphones
       let brand = this.filters.brand
