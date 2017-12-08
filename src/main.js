@@ -28,6 +28,12 @@ new Vue({
   template: '<App/>',
   components: { App },
   created () {
-    this.$store.dispatch('loadSmartphones')
+    this.$store.dispatch('loadBrands').then(() => {
+      this.$store.dispatch('loadScreens')
+    }).then(() => {
+      this.$store.dispatch('loadColors')
+    }).then(() => {
+      this.$store.dispatch('loadSmartphones')
+    })
   }
 })

@@ -19,11 +19,7 @@
     </v-layout>
 
     <v-layout row>
-      <v-container grid-list-md class="my-0" v-if="isLoadingSmartphones">
-        <v-progress-linear :indeterminate="true"></v-progress-linear>
-      </v-container>
-
-      <v-container grid-list-md class="my-0" v-else>
+      <v-container grid-list-md class="my-0">
         <v-layout row wrap>
           <v-flex sm6 lg4 xl3 v-for="item in smartphones" :key="JSON.stringify(item)">
             <store-item :product="item"></store-item>
@@ -91,10 +87,7 @@ export default {
   },
   data () {
     return {
-      brands: ['Somsong', 'Syno', 'THC', 'Acus', 'Aser'],
-      screens: ['Yes', 'No'],
-      colors: ['Red', 'Blue', 'Black', 'White', 'Grey', 'Sideral'],
-      features: ['WiFi', 'Bluetooth', 'NFC'],
+      features: ['WiFi', 'Bluetooth', 'IR'],
       filters: {
         brand: '',
         screen: '',
@@ -104,9 +97,6 @@ export default {
     }
   },
   computed: {
-    isLoadingSmartphones () {
-      return this.$store.getters.isLoadingType('smartphones')
-    },
     smartphones () {
       let smartphones = this.$store.getters.smartphones
       let brand = this.filters.brand
@@ -115,24 +105,26 @@ export default {
       let features = this.filters.features
 
       if (brand !== '') {
-        smartphones = smartphones.filter(smartphone => smartphone.caracteristics.brand === brand)
+        smartphones = smartphones.filter(smartphone => smartphone.nom_marque === brand)
       }
 
       if (screen !== '') {
-        smartphones = smartphones.filter(smartphone => smartphone.caracteristics.screen === screen)
+        smartphones = smartphones.filter(smartphone => smartphone.taille_ecran === screen)
       }
 
       if (color !== '') {
-        smartphones = smartphones.filter(smartphone => smartphone.caracteristics.color === color)
+        smartphones = smartphones.filter(smartphone => smartphone.couleur === color)
       }
 
       if (features.length !== 0) {
         smartphones = smartphones.filter(smartphone => {
-          let r = false
+          var r = true
 
           features.forEach(feature => {
             feature = feature.toLowerCase()
-            r = smartphone.caracteristics.features[feature]
+            if (!smartphone[feature]) {
+              r = false
+            }
           })
 
           return r
@@ -140,6 +132,18 @@ export default {
       }
 
       return smartphones
+    },
+    brands () {
+      let brands = this.$store.getters.brands
+      return brands.map(brand => brand.nom_marque)
+    },
+    screens () {
+      let screens = this.$store.getters.screens
+      return screens.map(screen => screen.taille).sort((a, b) => a > b)
+    },
+    colors () {
+      let colors = this.$store.getters.colors
+      return colors.map(color => color.couleur)
     }
   },
   methods: {
@@ -147,6 +151,7 @@ export default {
       this.filters.brand = ''
       this.filters.screen = ''
       this.filters.color = ''
+      this.filters.features = []
     }
   }
 }

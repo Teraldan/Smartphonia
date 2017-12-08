@@ -56,7 +56,10 @@ const state = {
       }
     }
     */
-  ]
+  ],
+  brands: [],
+  screens: [],
+  colors: []
 }
 
 const mutations = {
@@ -76,6 +79,15 @@ const mutations = {
   },
   SET_SMARTPHONES (state, payload) {
     state.smartphones = payload
+  },
+  SET_BRANDS (state, payload) {
+    state.brands = payload
+  },
+  SET_SCREENS (state, payload) {
+    state.screens = payload
+  },
+  SET_COLORS (state, payload) {
+    state.colors = payload
   }
 }
 
@@ -97,6 +109,45 @@ const actions = {
     .catch(e => {
       console.log(e)
       commit('SHIFT_LOADING', 'smartphones')
+    })
+  },
+  loadBrands ({ commit }) {
+    commit('PUSH_LOADING', 'brands')
+    axios.get(`http://teraldan.ddns.net/smartphonia/api/get/brands.php`)
+    .then(response => {
+      commit('SET_BRANDS', response.data)
+      console.log(response.data)
+      commit('SHIFT_LOADING', 'brands')
+    })
+    .catch(e => {
+      console.log(e)
+      commit('SHIFT_LOADING', 'brands')
+    })
+  },
+  loadScreens ({ commit }) {
+    commit('PUSH_LOADING', 'screens')
+    axios.get(`http://teraldan.ddns.net/smartphonia/api/get/screens.php`)
+    .then(response => {
+      commit('SET_SCREENS', response.data)
+      console.log(response.data)
+      commit('SHIFT_LOADING', 'screens')
+    })
+    .catch(e => {
+      console.log(e)
+      commit('SHIFT_LOADING', 'screens')
+    })
+  },
+  loadColors ({ commit }) {
+    commit('PUSH_LOADING', 'colors')
+    axios.get(`http://teraldan.ddns.net/smartphonia/api/get/colors.php`)
+    .then(response => {
+      commit('SET_COLORS', response.data)
+      console.log(response.data)
+      commit('SHIFT_LOADING', 'colors')
+    })
+    .catch(e => {
+      console.log(e)
+      commit('SHIFT_LOADING', 'colors')
     })
   }
 }
@@ -124,6 +175,9 @@ const getters = {
   },
   cart: state => state.cart,
   smartphones: state => state.smartphones,
+  brands: state => state.brands,
+  screens: state => state.screens,
+  colors: state => state.colors,
   smartphone (state) {
     return code_barre => state.smartphones.filter(smartphone => {
       console.log('filter smartphone')
