@@ -5,13 +5,16 @@ import axios from 'axios'
 
 Vue.use(Vuex)
 
+let apiUrl = 'http://teraldan.000webhostapp.com/smartphonia/api'
+let clientEmail = 'pierre.barthes@etu.univ-amu.fr'
+
 const state = {
   loading: [],
   client: {
-    firstname: 'Pierre',
-    lastname: 'BARTHES',
-    email: 'pierre.barthes@etu.univ-amu.fr',
-    birthDate: new Date(),
+    email: '',
+    mot_de_passe: '',
+    prenom: '',
+    nom: '',
     orders: [
       {
         id: 12345,
@@ -23,17 +26,6 @@ const state = {
           { name: 'Somsong S10', price: 259, count: 2 },
           { name: 'Forfait CROUS', price: 12, count: 1 }
         ]
-      },
-      {
-        id: 321,
-        billingName: 'BARTHES Pierre',
-        date: 'Sun Jan 01 2017 21:20:40 GMT+0100 (Paris, Madrid)',
-        deliveryAddress: '45 chemin des ormes',
-        billingAddress: '676 boulevard de la fête 57412 Bibiche',
-        products: [
-          { name: 'Crumble 9', price: 984, count: 1 },
-          { name: 'Forfait SHEAL', price: 45, count: 1 }
-        ]
       }
     ]
   },
@@ -42,20 +34,6 @@ const state = {
     { name: 'Forfait CROUS', price: 12, count: 1 }
   ],
   smartphones: [
-    /*
-    {
-      barCode: 1,
-      name: 'Somsong S10',
-      pictureUrl: 'http://consumer-img.huawei.com/content/dam/huawei-cbg-site/common/mkt/list-image/phones/p10/p10-listimage-black.png',
-      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sed lorem efficitur, dignissim mi a, malesuada risus. Nam ut finibus augue. Maecenas nibh dui, malesuada nec nulla ut, ultricies viverra tellus. Mauris erat lorem, finibus non congue vitae, sollicitudin in sem. Mauris commodo pretium purus, eu pellentesque ex placerat in. Aliquam felis magna, efficitur non leo tincidunt, posuere tincidunt ante. In congue nibh in magna lobortis, sit amet luctus mi sollicitudin.',
-      stars: 1.6584725,
-      price: 275.0,
-      viewedCount: 20,
-      caracteristics: {
-        brand: 'Somsong', screen: 'Yes', color: 'Black', features: { wifi: true, bluetooth: true }
-      }
-    }
-    */
   ],
   brands: [],
   screens: [],
@@ -88,6 +66,12 @@ const mutations = {
   },
   SET_COLORS (state, payload) {
     state.colors = payload
+  },
+  SET_CLIENT (state, payload) {
+    state.client = payload
+  },
+  SET_CLIENT_ORDERS (state, payload) {
+    state.client.orders = payload
   }
 }
 
@@ -100,10 +84,9 @@ const actions = {
   },
   loadSmartphones ({ commit }) {
     commit('PUSH_LOADING', 'smartphones')
-    axios.get(`http://teraldan.ddns.net/smartphonia/api/get/smartphones.php`)
+    axios.get(apiUrl + `/get/smartphones.php`)
     .then(response => {
       commit('SET_SMARTPHONES', response.data)
-      console.log(response.data)
       commit('SHIFT_LOADING', 'smartphones')
     })
     .catch(e => {
@@ -113,10 +96,9 @@ const actions = {
   },
   loadBrands ({ commit }) {
     commit('PUSH_LOADING', 'brands')
-    axios.get(`http://teraldan.ddns.net/smartphonia/api/get/brands.php`)
+    axios.get(apiUrl + `/get/brands.php`)
     .then(response => {
       commit('SET_BRANDS', response.data)
-      console.log(response.data)
       commit('SHIFT_LOADING', 'brands')
     })
     .catch(e => {
@@ -126,10 +108,9 @@ const actions = {
   },
   loadScreens ({ commit }) {
     commit('PUSH_LOADING', 'screens')
-    axios.get(`http://teraldan.ddns.net/smartphonia/api/get/screens.php`)
+    axios.get(apiUrl + `/get/screens.php`)
     .then(response => {
       commit('SET_SCREENS', response.data)
-      console.log(response.data)
       commit('SHIFT_LOADING', 'screens')
     })
     .catch(e => {
@@ -139,15 +120,38 @@ const actions = {
   },
   loadColors ({ commit }) {
     commit('PUSH_LOADING', 'colors')
-    axios.get(`http://teraldan.ddns.net/smartphonia/api/get/colors.php`)
+    axios.get(apiUrl + `/get/colors.php`)
     .then(response => {
       commit('SET_COLORS', response.data)
-      console.log(response.data)
       commit('SHIFT_LOADING', 'colors')
     })
     .catch(e => {
       console.log(e)
       commit('SHIFT_LOADING', 'colors')
+    })
+  },
+  loadClient ({ commit }) {
+    commit('PUSH_LOADING', 'client')
+    axios.get(apiUrl + `/get/client.php?client_email=` + clientEmail)
+    .then(response => {
+      commit('SET_CLIENT', response.data[0])
+      commit('SHIFT_LOADING', 'client')
+    })
+    .catch(e => {
+      console.log(e)
+      commit('SHIFT_LOADING', 'client')
+    })
+  },
+  loadClientOrders ({ commit, state }) {
+    commit('PUSH_LOADING', 'client_orders')
+    axios.get(apiUrl + `/get/orders.php?client_email=` + state.client.email)
+    .then(response => {
+      commit('SET_CLIENT_ORDERS', response.data)
+      commit('SHIFT_LOADING', 'client_orders')
+    })
+    .catch(e => {
+      console.log(e)
+      commit('SHIFT_LOADING', 'client_orders')
     })
   }
 }
@@ -180,8 +184,6 @@ const getters = {
   colors: state => state.colors,
   smartphone (state) {
     return code_barre => state.smartphones.filter(smartphone => {
-      console.log('filter smartphone')
-      console.log(smartphone.code_barre === code_barre)
       return smartphone.code_barre === code_barre
     })[0]
   }

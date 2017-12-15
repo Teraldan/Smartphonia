@@ -4,7 +4,7 @@
       <v-flex md9>
         <v-card>
           <v-card-media
-              src=""
+              :src="product.picture_url"
               height="400px"
               contain
           >
@@ -41,8 +41,20 @@
                     </v-list-tile>
                     <v-list-tile>
                       <v-layout row>
-                        <v-flex xs4>Screen</v-flex>
+                        <v-flex xs4>Screen size</v-flex>
                         <v-flex xs8>{{ product.taille_ecran }}</v-flex>
+                      </v-layout>
+                    </v-list-tile>
+                    <v-list-tile>
+                      <v-layout row>
+                        <v-flex xs4>Screen type</v-flex>
+                        <v-flex xs8>{{ product.type_ecran }}</v-flex>
+                      </v-layout>
+                    </v-list-tile>
+                    <v-list-tile>
+                      <v-layout row>
+                        <v-flex xs4>Screen density</v-flex>
+                        <v-flex xs8>{{ product.densite_ecran }} ppp</v-flex>
                       </v-layout>
                     </v-list-tile>
                     <v-list-tile>
@@ -76,26 +88,22 @@
                 </v-layout>
 
                 <v-layout row wrap>
-                  <v-flex md4 v-for="i in 4" :key="i">
-                    <v-card>
-                      <v-card-text>
-                        <v-layout row>
-                          <v-flex>
-                            <h4>Anonymous</h4>
-                          </v-flex>
-                          <v-spacer></v-spacer>
-                          <v-flex class="text-xs-right">
-                            29/02/18
-                          </v-flex>
-                        </v-layout>
+                  <v-flex md4 v-for="i in 4" :key="i" class="pa-3">
+                    <v-layout row>
+                      <v-flex>
+                        <h4>Anonymous</h4>
+                      </v-flex>
+                      <v-spacer></v-spacer>
+                      <v-flex class="text-xs-right">
+                        29/02/18
+                      </v-flex>
+                    </v-layout>
 
-                        <v-icon color="yellow" v-for="starI in starsFillCount" :key="starI">star</v-icon>
-                        <v-icon color="yellow" v-for="starI in starsHalfCount" :key="starI">star_half</v-icon>
-                        <v-icon color="yellow" v-for="starI in starsEmptyCount" :key="starI">star_border</v-icon>
-                        <br>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc nec ex orci. Curabitur consequat in est ac sodales. Interdum et malesuada fames ac ante ipsum primis in faucibus.
-                      </v-card-text>
-                    </v-card>
+                    <v-icon color="yellow" v-for="starI in starsFillCount" :key="starI">star</v-icon>
+                    <v-icon color="yellow" v-for="starI in starsHalfCount" :key="starI">star_half</v-icon>
+                    <v-icon color="yellow" v-for="starI in starsEmptyCount" :key="starI">star_border</v-icon>
+                    <br>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc nec ex orci. Curabitur consequat in est ac sodales. Interdum et malesuada fames ac ante ipsum primis in faucibus.
                   </v-flex>
                 </v-layout>
               </div>
@@ -174,8 +182,6 @@ export default {
     }
   },
   created () {
-    console.log('produit.vue created')
-    console.log(this.product)
   }
 }
 </script>

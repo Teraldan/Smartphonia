@@ -1,7 +1,7 @@
 <template>
   <v-card>
     <v-card-media
-    src=""
+    :src="product.picture_url"
     :height="height"
     contain
     @click="$router.push('/store/smartphone/'+product.code_barre)">
@@ -11,6 +11,10 @@
         {{ product.nom_modele }} 
         <span class="caption" v-if="product.edition_limitee==1">Edition limitée</span>
       </router-link>
+
+      <h4>
+        {{ product.nom_marque }}
+      </h4>
 
       <v-layout row>
         <v-flex>

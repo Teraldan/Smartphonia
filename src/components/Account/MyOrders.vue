@@ -53,6 +53,9 @@ export default {
       let orders = JSON.parse(JSON.stringify(this.orders))
       orders.sort((a, b) => a.date > b.date)
       return orders
+    },
+    client () {
+      return this.$store.getters.client
     }
   }
 }

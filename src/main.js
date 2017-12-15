@@ -34,6 +34,10 @@ new Vue({
       this.$store.dispatch('loadColors')
     }).then(() => {
       this.$store.dispatch('loadSmartphones')
+    }).then(() => {
+      this.$store.dispatch('loadClient')
+    }).then(() => {
+      this.$store.dispatch('loadClientOrders')
     })
   }
 })

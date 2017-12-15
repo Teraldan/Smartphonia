@@ -6,7 +6,7 @@
       <v-list-tile>
         <v-layout row>
           <v-flex sm4><h4>Name</h4></v-flex>
-          <v-flex sm8>{{ client.lastname }} {{ client.firstname }}</v-flex>
+          <v-flex sm8>{{ client.nom }} {{ client.prenom }}</v-flex>
         </v-layout>
       </v-list-tile>
 

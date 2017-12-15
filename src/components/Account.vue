@@ -9,7 +9,7 @@
             <v-container fill-height fluid>
               <v-layout flex align-center justify-center>
                 <v-flex xs12 align-end flexbox class="white--text">
-                  <h1 class="text-xs-left display-1">Welcome back, {{ client.firstname }} !</h1>
+                  <h1 class="text-xs-left display-1">Welcome back, {{ client.prenom }} !</h1>
                 </v-flex>
               </v-layout>
             </v-container>

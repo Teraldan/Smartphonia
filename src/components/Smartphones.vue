@@ -21,7 +21,7 @@
     <v-layout row>
       <v-container grid-list-md class="my-0">
         <v-layout row wrap>
-          <v-flex sm6 lg4 xl3 v-for="item in smartphones" :key="JSON.stringify(item)">
+          <v-flex d-flex sm6 lg4 xl3 v-for="item in smartphones" :key="JSON.stringify(item)">
             <store-item :product="item"></store-item>
           </v-flex>
         </v-layout>
@@ -122,7 +122,8 @@ export default {
 
           features.forEach(feature => {
             feature = feature.toLowerCase()
-            if (!smartphone[feature]) {
+            // eslint-disable-next-line
+            if (smartphone[feature] == false) {
               r = false
             }
           })
@@ -139,7 +140,7 @@ export default {
     },
     screens () {
       let screens = this.$store.getters.screens
-      return screens.map(screen => screen.taille).sort((a, b) => a > b)
+      return screens.map(screen => screen.taille_ecran).sort((a, b) => a > b)
     },
     colors () {
       let colors = this.$store.getters.colors

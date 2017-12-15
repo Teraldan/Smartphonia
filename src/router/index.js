@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import Home from '@/components/Home'
 import Store from '@/components/Store/Store'
 import Smartphones from '@/components/Smartphones'
-import Product from '@/components/Product'
+import Smartphone from '@/components/Smartphone'
 import Account from '@/components/Account'
 import MyAccount from '@/components/Account/MyAccount'
 import MyOrders from '@/components/Account/MyOrders'
@@ -34,7 +34,7 @@ export default new Router({
           path: 'smartphone/:barCode',
           name: 'Smartphone',
           props: true,
-          component: Product
+          component: Smartphone
         }
       ]
     },
