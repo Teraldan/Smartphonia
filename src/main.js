@@ -28,16 +28,10 @@ new Vue({
   template: '<App/>',
   components: { App },
   created () {
-    this.$store.dispatch('loadBrands').then(() => {
-      this.$store.dispatch('loadScreens')
-    }).then(() => {
-      this.$store.dispatch('loadColors')
-    }).then(() => {
-      this.$store.dispatch('loadSmartphones')
-    }).then(() => {
-      this.$store.dispatch('loadClient')
-    }).then(() => {
-      this.$store.dispatch('loadClientOrders')
+    this.$store.dispatch('loadDatas').then(() => {
+      console.log('data loaded')
+    }).catch((err) => {
+      console.log('Error : ' + err)
     })
   }
 })

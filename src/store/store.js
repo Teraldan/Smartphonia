@@ -15,26 +15,14 @@ const state = {
     mot_de_passe: '',
     prenom: '',
     nom: '',
-    orders: [
-      {
-        id: 12345,
-        billingName: 'BARTHES Pierre',
-        date: new Date(),
-        deliveryAddress: '45 chemin des ormes',
-        billingAddress: '676 boulevard de la fête 57412 Bibiche',
-        products: [
-          { name: 'Somsong S10', price: 259, count: 2 },
-          { name: 'Forfait CROUS', price: 12, count: 1 }
-        ]
-      }
-    ]
+    orders: []
   },
   cart: [
     { name: 'Somsong S10', price: 259, count: 2 },
     { name: 'Forfait CROUS', price: 12, count: 1 }
   ],
-  smartphones: [
-  ],
+  smartphones: [],
+  plans: [],
   brands: [],
   screens: [],
   colors: []
@@ -55,6 +43,9 @@ const mutations = {
       state.loading.splice(index, 1)
     }
   },
+  SET_PLANS (state, payload) {
+    state.plans = payload
+  },
   SET_SMARTPHONES (state, payload) {
     state.smartphones = payload
   },
@@ -72,6 +63,9 @@ const mutations = {
   },
   SET_CLIENT_ORDERS (state, payload) {
     state.client.orders = payload
+  },
+  SET_CLIENT_BILLINGS (state, payload) {
+    payload.order.billing = payload.billing
   }
 }
 
@@ -82,9 +76,22 @@ const actions = {
   shiftLoading ({ commit }, payload) {
     commit('SHIFT_LOADING', payload)
   },
-  loadSmartphones ({ commit }) {
+  async loadPlans ({ commit }) {
+    commit('PUSH_LOADING', 'plans')
+    await axios.get(apiUrl + `/get/plans.php`)
+    .then(response => {
+      commit('SET_PLANS', response.data)
+      commit('SHIFT_LOADING', 'plans')
+    })
+    .catch(e => {
+      console.log(e)
+      commit('SHIFT_LOADING', 'smartphones')
+    })
+  },
+  async loadSmartphones ({ commit }) {
+    console.log('loadSmartphones')
     commit('PUSH_LOADING', 'smartphones')
-    axios.get(apiUrl + `/get/smartphones.php`)
+    await axios.get(apiUrl + `/get/smartphones.php`)
     .then(response => {
       commit('SET_SMARTPHONES', response.data)
       commit('SHIFT_LOADING', 'smartphones')
@@ -94,9 +101,10 @@ const actions = {
       commit('SHIFT_LOADING', 'smartphones')
     })
   },
-  loadBrands ({ commit }) {
+  async loadBrands ({ commit }) {
+    console.log('loadBrands')
     commit('PUSH_LOADING', 'brands')
-    axios.get(apiUrl + `/get/brands.php`)
+    await axios.get(apiUrl + `/get/brands.php`)
     .then(response => {
       commit('SET_BRANDS', response.data)
       commit('SHIFT_LOADING', 'brands')
@@ -106,9 +114,10 @@ const actions = {
       commit('SHIFT_LOADING', 'brands')
     })
   },
-  loadScreens ({ commit }) {
+  async loadScreens ({ commit }) {
+    console.log('loadScreens')
     commit('PUSH_LOADING', 'screens')
-    axios.get(apiUrl + `/get/screens.php`)
+    await axios.get(apiUrl + `/get/screens.php`)
     .then(response => {
       commit('SET_SCREENS', response.data)
       commit('SHIFT_LOADING', 'screens')
@@ -118,9 +127,10 @@ const actions = {
       commit('SHIFT_LOADING', 'screens')
     })
   },
-  loadColors ({ commit }) {
+  async loadColors ({ commit }) {
+    console.log('loadColors')
     commit('PUSH_LOADING', 'colors')
-    axios.get(apiUrl + `/get/colors.php`)
+    await axios.get(apiUrl + `/get/colors.php`)
     .then(response => {
       commit('SET_COLORS', response.data)
       commit('SHIFT_LOADING', 'colors')
@@ -130,9 +140,10 @@ const actions = {
       commit('SHIFT_LOADING', 'colors')
     })
   },
-  loadClient ({ commit }) {
+  async loadClient ({ commit }) {
+    console.log('loadClient')
     commit('PUSH_LOADING', 'client')
-    axios.get(apiUrl + `/get/client.php?client_email=` + clientEmail)
+    await axios.get(apiUrl + `/get/client.php?client_email=` + clientEmail)
     .then(response => {
       commit('SET_CLIENT', response.data[0])
       commit('SHIFT_LOADING', 'client')
@@ -142,9 +153,10 @@ const actions = {
       commit('SHIFT_LOADING', 'client')
     })
   },
-  loadClientOrders ({ commit, state }) {
+  async loadClientOrders ({ commit }) {
+    console.log('loadClientOrders')
     commit('PUSH_LOADING', 'client_orders')
-    axios.get(apiUrl + `/get/orders.php?client_email=` + state.client.email)
+    await axios.get(apiUrl + `/get/orders.php?client_email=` + clientEmail)
     .then(response => {
       commit('SET_CLIENT_ORDERS', response.data)
       commit('SHIFT_LOADING', 'client_orders')
@@ -153,6 +165,34 @@ const actions = {
       console.log(e)
       commit('SHIFT_LOADING', 'client_orders')
     })
+  },
+  async loadClientBillings ({ commit, getters }) {
+    console.log('loadClientBillings')
+    console.log(getters.client)
+    getters.client.orders.forEach(order => {
+      commit('PUSH_LOADING', 'client_billings')
+      axios.get(apiUrl + '/get/billings.php?num_order=' + order.num_commande)
+      .then(response => {
+        commit('SET_CLIENT_BILLINGS', {
+          order: order,
+          billing: response.data[0]
+        })
+        commit('SHIFT_LOADING', 'client_billings')
+      })
+      .catch(e => {
+        console.log(e)
+        commit('SHIFT_LOADING', 'client_billings')
+      })
+    })
+  },
+  async loadDatas ({ dispatch, commit }) {
+    await dispatch('loadBrands')
+    await dispatch('loadScreens')
+    await dispatch('loadColors')
+    await dispatch('loadSmartphones')
+    await dispatch('loadClient')
+    await dispatch('loadClientOrders')
+    await dispatch('loadClientBillings')
   }
 }
 
