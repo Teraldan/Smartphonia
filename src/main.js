@@ -20,6 +20,16 @@ Vue.use(vuemoment)
 
 Vue.config.productionTip = false
 
+// eslint-disable-next-line
+Array.prototype.groupBy = (prop) => {
+  return this.reduce((groups, item) => {
+    var val = item[prop]
+    groups[val] = groups[val] || []
+    groups[val].push(item)
+    return groups
+  }, {})
+}
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
