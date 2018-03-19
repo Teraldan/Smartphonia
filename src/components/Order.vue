@@ -12,7 +12,7 @@
             </v-btn>
           </v-card-text>
           <v-card-media
-          src="/static/abstract.jpg"
+          src="static/abstract.jpg"
           height="120px">
             <v-container fill-height fluid>
               <v-layout flex align-center justify-center>
@@ -38,7 +38,7 @@
           </v-card-text>
 
           <v-card-media
-          src="/static/abstract.jpg"
+          src="static/abstract.jpg"
           height="120px">
             <v-container fill-height fluid>
               <v-layout flex align-center justify-center>
